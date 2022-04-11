@@ -61,6 +61,7 @@ type Query {
   currentUser: CurrentUser
   modelPlan(id: UUID!) : ModelPlan
   modelPlanCollection: [ModelPlan]
+  planCharacteristics(planid: UUID!): PlanCharacteristics
 }
 """
 Mutations definition for the schema

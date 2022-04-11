@@ -44,7 +44,7 @@ This bit is about Medicare advantage or Part D...
   community_partners_involved_note text,
   targeted_at_specific_geographies  tri_state_answer,
 
-  geography_type  text, --should be a type -- STATE, REGION, OTHER
+  geography_type  geo_type, --should be a type -- STATE, REGION, OTHER
   geography_type_other text,
   geographies_applied_to text, --should be a type -- PARTICIPANTS, PROVIDERS, BENEFICIAREIES, OTHER
   geographies_applied_to_other text,
@@ -52,18 +52,18 @@ This bit is about Medicare advantage or Part D...
 
   different_options_for_participation tri_state_answer,
   different_options_for_participation_note text,
-  agreement_type text, --should be a type --PARTICIPATION AGREEMENT, CO-OPERativeAgreement / GRANT . OTHER, TBD
+  agreement_type agr_type, --should be a type --PARTICIPATION AGREEMENT, CO-OPERativeAgreement / GRANT . OTHER, TBD
   agreement_type_other text, --should be a type
   agreement_type_note text,
   rule_making tri_state_answer, --should be a type
   rule_making_details TEXT, -- If Yes is the answer
   rule_making_note text,
-  autthority_to_test text, --should be a type -- 3021, Congressionally Mandated, Section 1833, TBD, OTHER
-  autthority_to_test_other text,
+  authority_to_test authority_to_test, --should be a type -- 3021, Congressionally Mandated, Section 1833, TBD, OTHER
+  authority_to_test_other text,
   authority_to_test_note text,
 
   waivers_required  tri_state_answer,
-  waiver_type text, --should be a type --FRAUD AND ABUSE --PROGRAM PAYMENT --MEDICAID --TBD
+  waiver_type waiver_type, --should be a type --FRAUD AND ABUSE --PROGRAM PAYMENT --MEDICAID --TBD
   waiver_note text, 
   primary key (id),
 

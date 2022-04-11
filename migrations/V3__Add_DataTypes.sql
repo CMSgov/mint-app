@@ -28,3 +28,41 @@ CREATE TYPE cmmi_group as ENUM (
 );
 CREATE TYPE model_type as ENUM ('Voluntary', 'Mandatory', 'TBD');
 CREATE TYPE tri_state_answer as ENUM ('Yes', 'No', 'TBD');
+
+
+
+
+CREATE TYPE geo_type as ENUM (
+ 'State',
+ 'Region',
+ 'Other'
+);
+
+CREATE TYPE geo_app as ENUM (
+ 'Participants',
+ 'Providers',
+ 'Beneficiaries',
+ 'Other'
+);
+
+CREATE TYPE agr_type as ENUM (
+ 'Participation Agreement',
+ 'Co-Operative Agreement/Grant',
+ 'Other',
+ 'TBD'
+);
+
+CREATE TYPE authority_to_test as ENUM (
+ '3021 (ACA)',
+ 'Congressionally Mandated',
+ 'Section 1833(e) (Part B services) of the Social Security Act',
+ 'TBD',
+ 'Other'
+);
+
+CREATE TYPE waiver_type as ENUM (
+ 'Fraud and Abuse',
+ 'Program/payment',
+ 'Medicaid',
+ 'TBD'
+);
