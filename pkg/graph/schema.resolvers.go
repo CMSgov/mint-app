@@ -5,14 +5,16 @@ package graph
 
 import (
 	"context"
+	"fmt"
+
+	"github.com/google/uuid"
+	"github.com/guregu/null"
 
 	"github.com/cmsgov/mint-app/pkg/appcontext"
 	"github.com/cmsgov/mint-app/pkg/flags"
 	"github.com/cmsgov/mint-app/pkg/graph/generated"
 	"github.com/cmsgov/mint-app/pkg/graph/model"
 	"github.com/cmsgov/mint-app/pkg/models"
-	"github.com/google/uuid"
-	"github.com/guregu/null"
 )
 
 func (r *modelPlanResolver) Requester(ctx context.Context, obj *models.ModelPlan) (*string, error) {
@@ -40,7 +42,6 @@ func (r *modelPlanResolver) ModifiedBy(ctx context.Context, obj *models.ModelPla
 }
 
 func (r *mutationResolver) CreateModelPlan(ctx context.Context, input model.ModelPlanInput) (*models.ModelPlan, error) {
-
 	plan := ConvertToModelPlan(&input)
 
 	plan.CreatedBy = null.StringFrom(appcontext.Principal(ctx).ID())
@@ -56,27 +57,8 @@ func (r *mutationResolver) CreateModelPlan(ctx context.Context, input model.Mode
 	// createdPlan, err := r.store.ModelPlanCreate(ctx, &plan)
 	return createdPlan, err
 }
-func ConvertToModelPlan(mpi *model.ModelPlanInput) *models.ModelPlan {
-	plan := models.ModelPlan{
-		// ID:                      *mpi.ID,
-		Requester:               null.StringFromPtr(mpi.Requester),
-		RequesterComponent:      null.StringFromPtr(mpi.RequesterComponent),
-		MainPointOfContact:      null.StringFromPtr(mpi.MainPointOfContact),
-		PointOfContactComponent: null.StringFromPtr(mpi.PointOfContactComponent),
-		CreatedBy:               null.StringFromPtr(mpi.CreatedBy),
-		CreatedDts:              mpi.CreatedDts,
-		ModifiedBy:              null.StringFromPtr(mpi.ModifiedBy),
-		ModifiedDts:             mpi.ModifiedDts,
-	}
-	if mpi.ID != nil {
-		plan.ID = *mpi.ID
-	}
-	return &plan
-
-}
 
 func (r *mutationResolver) UpdateModelPlan(ctx context.Context, input model.ModelPlanInput) (*models.ModelPlan, error) {
-
 	plan := ConvertToModelPlan(&input)
 	plan.ModifiedBy = null.StringFrom(appcontext.Principal(ctx).ID())
 	// models.ModelPlan{
@@ -93,6 +75,17 @@ func (r *mutationResolver) UpdateModelPlan(ctx context.Context, input model.Mode
 
 	retPlan, err := r.store.ModelPlanUpdate(ctx, plan)
 	return retPlan, err
+}
+
+func (r *mutationResolver) CreatePlanCharacteristics(ctx context.Context, input model.IDInput) (*models.PlanCharacteristics, error) {
+	newChar := models.PlanCharacteristics{}
+	char, err := r.store.PlanCharacteristicsCreate(ctx, &newChar)
+
+	return char, err
+}
+
+func (r *planCharacteristicsResolver) WaiverType(ctx context.Context, obj *models.PlanCharacteristics) (*models.WaiverType, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) CurrentUser(ctx context.Context) (*model.CurrentUser, error) {
@@ -127,15 +120,27 @@ func (r *queryResolver) ModelPlanCollection(ctx context.Context) ([]*models.Mode
 	return plans, nil
 }
 
+func (r *queryResolver) PlanCharacteristics(ctx context.Context, planid uuid.UUID) (*models.PlanCharacteristics, error) {
+	char, err := r.store.PlanCharacteristicsGetByModelID(ctx, planid)
+
+	return char, err
+}
+
 // ModelPlan returns generated.ModelPlanResolver implementation.
 func (r *Resolver) ModelPlan() generated.ModelPlanResolver { return &modelPlanResolver{r} }
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
+// PlanCharacteristics returns generated.PlanCharacteristicsResolver implementation.
+func (r *Resolver) PlanCharacteristics() generated.PlanCharacteristicsResolver {
+	return &planCharacteristicsResolver{r}
+}
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type modelPlanResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
+type planCharacteristicsResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

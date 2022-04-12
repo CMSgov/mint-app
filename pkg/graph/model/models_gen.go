@@ -16,6 +16,10 @@ type CurrentUser struct {
 	LaunchDarkly *LaunchDarklySettings `json:"launchDarkly"`
 }
 
+type IDInput struct {
+	ID *uuid.UUID `json:"id"`
+}
+
 // The current user's Launch Darkly key
 type LaunchDarklySettings struct {
 	UserKey    string `json:"userKey"`

@@ -51,8 +51,101 @@ createdDts: Time
 modifiedBy: String
 modifiedDts: Time
 }
+input IdInput{
+  id: UUID
+}
 
+type PlanCharacteristics{
+id:                                   UUID
+modelPlanID:                          UUID
+existingModelOrNewTrack:              String
+existingModel:                        String
+resemblesExistingModel:               String
+existingModelResemblance:             String
+howModelResemblesNote:                String
+howModelDiffersNote:                  String
+modelMatchAddNote:                    String
+differentComponents:                  TriStateAnswer
+differentComponentsNote:              String
+apmQpp:                               TriStateAnswer
+apmQppType:                           String
+apmQppNote:                           String
+modelKeyCharacteristics:              String
+modelKeyCharacteristicsOther:         String
+modelKeyCharacteristicsNote:          String
+medicareReviewPlanBids:               TriStateAnswer
+medicareReviewPlanBidsNote:           String
+medicareManageEnrollment:             TriStateAnswer
+medicareManageEnrollmentNote:         String
+updatedPlanContact:                   TriStateAnswer
+updatedPlanContactNote:               String
+careCoordinationInvolved:             TriStateAnswer
+careCoordinationInvolvedNote:         String
+additionalServicesInvolved:           TriStateAnswer
+additionalServicesInvolvedNote:       String
+communityPartnersInvolved:            TriStateAnswer
+communityPartnersInvolvedNote:        String
+targetedAtSpecificGeographies:        TriStateAnswer
+geographyType:                        GeoType
+geographyTypeOther:                   String
+geographiesAppliedTo:                 GeoApp
+geographiesAppliedToOther:            String
+targetedAtSpecificGeographiesNote:    String
+differentOptionsForParticipation:     TriStateAnswer
+differentOptionsForParticipationNote: String
+agreementType:                        AgrType
+agreementTypeOther:                   String
+agreementTypeNote:                    String
+ruleMaking:                           TriStateAnswer
+ruleMakingDetails:                    String
+ruleMakingNote:                       String
+autthorityToTest:                     AuthorityToTest
+autthorityToTestOther:                String
+authorityToTestNote:                  String
+waiversRequired:                      TriStateAnswer
+waiverType:                           WaiverType
+waiverNote:                           String
+createdBy:                            String
+createdDts:                           Time
+modifiedBy:                           String
+modifiedDts:                          Time
+status:                               String
+}
 
+enum TriStateAnswer {
+  YES
+  NO
+  TBD
+}
+enum GeoType {
+STATE
+REGION
+OTHER
+}
+enum GeoApp {
+PARTICIPANTS
+PROVIDERS
+BENEFICIARIES
+OTHER  
+}
+enum AgrType {
+PARTICIPATION_AGREEMENT
+CO_OPERATIVE_AGREEMENT_GRANT #Co-Operative Agreement/Grant
+OTHER
+TBD
+}
+enum AuthorityToTest {
+ACA #3021 (ACA)
+CONGRESSIONALLY_MANDATED
+PART_B_SERVICES_OF_THE_SOCIAL_SECURITY_ACT #Section 1833(e) (Part B services) of the Social Security Act
+TBD
+OTHER
+}
+enum WaiverType {
+PROGRAM_PAYMENT #@Program/payment
+MEDICAID
+TBD
+}
 
 """
 Query definition for the schema
@@ -70,6 +163,8 @@ type Mutation {
 createModelPlan(input: ModelPlanInput!):ModelPlan
 @hasRole(role: MINT_BASE_USER)
 updateModelPlan(input: ModelPlanInput!):ModelPlan
+@hasRole(role: MINT_BASE_USER)
+createPlanCharacteristics(input: IdInput!):PlanCharacteristics
 @hasRole(role: MINT_BASE_USER)
 
 }
