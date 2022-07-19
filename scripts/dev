@@ -380,6 +380,21 @@ namespace :db do
     `docker-compose run --entrypoint="mc tag set 's3local/mint-app-file-uploads/25c81e5a-4940-45fe-85c7-fcbe37a3c317.pdf' 'av-status=INFECTED'" minio_mc`
   end
   
+  desc "Update existing seeded data to match the schema"
+  task :dataUpdate , [:file] do |t, args|
+    #Get the current schema
+    #TODO, can I set this as table data only, vs this which exports everthing
+    sh "pg_dump -T *.*flyway* -T *.*existing_model --schema-only --column-inserts > scripts/data/currentSchema.sql "
+    file = args.to_a[0]
+    #scripts/data/local-db.sql
+    if file == nil
+    sh "go run cmd/seedMigration/main.go"
+  else
+    sh "go run cmd/seedMigration/main.go -path " + file
+  end
+
+  end
+  
   def seed(db_file_path = "scripts/data/local-db.sql" )
     command = "psql < " + db_file_path + " > /dev/null"
     
