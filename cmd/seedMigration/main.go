@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// Schema is the current schema from the DB
 var Schema *dbSchema
 
 func main() {
@@ -27,26 +28,29 @@ func main() {
 		}
 	}
 	//GET CURRENT SCHEMA
-	Schema, err := parseSchema()
-	_ = Schema
+	schema, err := parseSchema()
+	Schema = schema
 	// Schema = schema
 	if err != nil {
 		panic(err)
 	}
 	err = readFile(filePath)
+	if err != nil {
+		panic(err)
+	}
 
 }
 
 func readFile(file string) error {
 	// open file
-	f, err := os.Open(file)
+	f, err := os.Open(file) //nolint
 	// f, err := os.Open("file.txt")
 	if err != nil {
 		log.Fatal(err)
 		return err
 	}
 	// remember to close the file at the end of the program
-	defer f.Close()
+	defer f.Close() //nolint
 
 	// read the file line by line using scanner
 	scanner := bufio.NewScanner(f)
@@ -166,7 +170,7 @@ type insertEntry struct {
 	value  string
 }
 
-type TableSchema struct {
+type tableSchema struct {
 	Name    string
 	Columns map[string]columnSchema
 }
@@ -178,7 +182,7 @@ type columnSchema struct {
 }
 
 type dbSchema struct {
-	Tables map[string]TableSchema
+	Tables map[string]tableSchema
 }
 
 func parseSchema() (*dbSchema, error) {
@@ -201,7 +205,7 @@ func parseSchema() (*dbSchema, error) {
 
 	//todo, get all the text, compile regex and match from that pattern to get all the create table stuff ( or see if I can do it in BASH)
 	newSchema := dbSchema{
-		Tables: map[string]TableSchema{},
+		Tables: map[string]tableSchema{},
 	}
 
 	re := regexp.MustCompile(regexPattern)
@@ -216,15 +220,15 @@ func parseSchema() (*dbSchema, error) {
 
 }
 
-func (s *dbSchema) GetTable(name string) TableSchema {
+func (s *dbSchema) GetTable(name string) tableSchema {
 
 	return s.Tables[name]
 
 }
 
-func parseTable(tableString string) TableSchema {
+func parseTable(tableString string) tableSchema {
 
-	Schema := TableSchema{
+	Schema := tableSchema{
 		Columns: map[string]columnSchema{},
 	}
 	tableString = strings.Trim(tableString, ");")
