@@ -75,9 +75,9 @@ const TaskList = () => {
     generalCharacteristics,
     participantsAndProviders,
     opsEvalAndLearning,
-    beneficiaries
+    beneficiaries,
     // operations,
-    // payment,
+    payments
     // finalizeModelPlan
   } = modelPlan;
 
@@ -110,8 +110,8 @@ const TaskList = () => {
         return beneficiaries.status;
       case 'ops-eval-and-learning':
         return opsEvalAndLearning.status;
-      // case 'payment':
-      //   return;
+      case 'payment':
+        return payments.status;
       // case 'finalizeModelPlan':
       //   return;
       default:
