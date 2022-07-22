@@ -75,9 +75,10 @@ const TaskList = () => {
     generalCharacteristics,
     participantsAndProviders,
     opsEvalAndLearning,
-    beneficiaries
+    beneficiaries,
     // operations,
     // payment,
+    itTools
     // finalizeModelPlan
   } = modelPlan;
 
@@ -114,6 +115,8 @@ const TaskList = () => {
       //   return;
       // case 'finalizeModelPlan':
       //   return;
+      case 'it-tools':
+        return itTools.status;
       default:
         return 'CANNOT_START';
     }
