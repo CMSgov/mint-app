@@ -1178,6 +1178,13 @@ export enum ParticipantCommunicationType {
   OTHER = 'OTHER'
 }
 
+export enum ParticipantRequireFinancialGuaranteeType {
+  ESCROW = 'ESCROW',
+  LETTER_OF_CREDIT = 'LETTER_OF_CREDIT',
+  OTHER = 'OTHER',
+  SURETY_BOND = 'SURETY_BOND'
+}
+
 export enum ParticipantRiskType {
   CAPITATION = 'CAPITATION',
   NOT_RISK_BASED = 'NOT_RISK_BASED',
@@ -2002,6 +2009,10 @@ export type PlanParticipantsAndProviders = {
   participantRemovedFrequencyContinually?: Maybe<Scalars['String']['output']>;
   participantRemovedFrequencyNote?: Maybe<Scalars['String']['output']>;
   participantRemovedFrequencyOther?: Maybe<Scalars['String']['output']>;
+  participantRequireFinancialGuarantee?: Maybe<Scalars['Boolean']['output']>;
+  participantRequireFinancialGuaranteeNote?: Maybe<Scalars['String']['output']>;
+  participantRequireFinancialGuaranteeOther?: Maybe<Scalars['String']['output']>;
+  participantRequireFinancialGuaranteeType: Array<ParticipantRequireFinancialGuaranteeType>;
   participants: Array<ParticipantsType>;
   participantsCurrentlyInModels?: Maybe<Scalars['Boolean']['output']>;
   participantsCurrentlyInModelsNote?: Maybe<Scalars['String']['output']>;
@@ -2078,6 +2089,10 @@ export type PlanParticipantsAndProvidersChanges = {
   participantRemovedFrequencyContinually?: InputMaybe<Scalars['String']['input']>;
   participantRemovedFrequencyNote?: InputMaybe<Scalars['String']['input']>;
   participantRemovedFrequencyOther?: InputMaybe<Scalars['String']['input']>;
+  participantRequireFinancialGuarantee?: InputMaybe<Scalars['Boolean']['input']>;
+  participantRequireFinancialGuaranteeNote?: InputMaybe<Scalars['String']['input']>;
+  participantRequireFinancialGuaranteeOther?: InputMaybe<Scalars['String']['input']>;
+  participantRequireFinancialGuaranteeType?: InputMaybe<Array<ParticipantRequireFinancialGuaranteeType>>;
   participants?: InputMaybe<Array<ParticipantsType>>;
   participantsCurrentlyInModels?: InputMaybe<Scalars['Boolean']['input']>;
   participantsCurrentlyInModelsNote?: InputMaybe<Scalars['String']['input']>;
@@ -3352,7 +3367,7 @@ export type GetAllParticipantsAndProvidersQueryVariables = Exact<{
 }>;
 
 
-export type GetAllParticipantsAndProvidersQuery = { __typename: 'Query', modelPlan: { __typename: 'ModelPlan', id: UUID, participantsAndProviders: { __typename: 'PlanParticipantsAndProviders', id: UUID, participants: Array<ParticipantsType>, medicareProviderType?: string | null, statesEngagement?: string | null, participantsOther?: string | null, participantsNote?: string | null, participantsCurrentlyInModels?: boolean | null, participantsCurrentlyInModelsNote?: string | null, modelApplicationLevel?: string | null, expectedNumberOfParticipants?: number | null, estimateConfidence?: ConfidenceType | null, confidenceNote?: string | null, recruitmentMethod?: RecruitmentType | null, recruitmentOther?: string | null, recruitmentNote?: string | null, selectionMethod: Array<ParticipantSelectionType>, selectionOther?: string | null, selectionNote?: string | null, participantAddedFrequency: Array<FrequencyType>, participantAddedFrequencyContinually?: string | null, participantAddedFrequencyOther?: string | null, participantAddedFrequencyNote?: string | null, participantRemovedFrequency: Array<FrequencyType>, participantRemovedFrequencyContinually?: string | null, participantRemovedFrequencyOther?: string | null, participantRemovedFrequencyNote?: string | null, communicationMethod: Array<ParticipantCommunicationType>, communicationMethodOther?: string | null, communicationNote?: string | null, riskType: Array<ParticipantRiskType>, riskOther?: string | null, riskNote?: string | null, willRiskChange?: boolean | null, willRiskChangeNote?: string | null, coordinateWork?: boolean | null, coordinateWorkNote?: string | null, gainsharePayments?: boolean | null, gainsharePaymentsTrack?: boolean | null, gainsharePaymentsNote?: string | null, gainsharePaymentsEligibility: Array<GainshareArrangementEligibility>, gainsharePaymentsEligibilityOther?: string | null, participantsIds: Array<ParticipantsIdType>, participantsIdsOther?: string | null, participantsIDSNote?: string | null, providerAdditionFrequency: Array<FrequencyType>, providerAdditionFrequencyContinually?: string | null, providerAdditionFrequencyOther?: string | null, providerAdditionFrequencyNote?: string | null, providerAddMethod: Array<ProviderAddType>, providerAddMethodOther?: string | null, providerAddMethodNote?: string | null, providerLeaveMethod: Array<ProviderLeaveType>, providerLeaveMethodOther?: string | null, providerLeaveMethodNote?: string | null, providerRemovalFrequency: Array<FrequencyType>, providerRemovalFrequencyContinually?: string | null, providerRemovalFrequencyOther?: string | null, providerRemovalFrequencyNote?: string | null, providerOverlap?: OverlapType | null, providerOverlapHierarchy?: string | null, providerOverlapNote?: string | null, status: TaskStatus } } };
+export type GetAllParticipantsAndProvidersQuery = { __typename: 'Query', modelPlan: { __typename: 'ModelPlan', id: UUID, participantsAndProviders: { __typename: 'PlanParticipantsAndProviders', id: UUID, participants: Array<ParticipantsType>, medicareProviderType?: string | null, statesEngagement?: string | null, participantsOther?: string | null, participantsNote?: string | null, participantsCurrentlyInModels?: boolean | null, participantsCurrentlyInModelsNote?: string | null, modelApplicationLevel?: string | null, expectedNumberOfParticipants?: number | null, estimateConfidence?: ConfidenceType | null, confidenceNote?: string | null, recruitmentMethod?: RecruitmentType | null, recruitmentOther?: string | null, recruitmentNote?: string | null, selectionMethod: Array<ParticipantSelectionType>, selectionOther?: string | null, selectionNote?: string | null, participantAddedFrequency: Array<FrequencyType>, participantAddedFrequencyContinually?: string | null, participantAddedFrequencyOther?: string | null, participantAddedFrequencyNote?: string | null, participantRemovedFrequency: Array<FrequencyType>, participantRemovedFrequencyContinually?: string | null, participantRemovedFrequencyOther?: string | null, participantRemovedFrequencyNote?: string | null, communicationMethod: Array<ParticipantCommunicationType>, communicationMethodOther?: string | null, communicationNote?: string | null, riskType: Array<ParticipantRiskType>, riskOther?: string | null, riskNote?: string | null, willRiskChange?: boolean | null, willRiskChangeNote?: string | null, participantRequireFinancialGuarantee?: boolean | null, participantRequireFinancialGuaranteeType: Array<ParticipantRequireFinancialGuaranteeType>, participantRequireFinancialGuaranteeOther?: string | null, participantRequireFinancialGuaranteeNote?: string | null, coordinateWork?: boolean | null, coordinateWorkNote?: string | null, gainsharePayments?: boolean | null, gainsharePaymentsTrack?: boolean | null, gainsharePaymentsNote?: string | null, gainsharePaymentsEligibility: Array<GainshareArrangementEligibility>, gainsharePaymentsEligibilityOther?: string | null, participantsIds: Array<ParticipantsIdType>, participantsIdsOther?: string | null, participantsIDSNote?: string | null, providerAdditionFrequency: Array<FrequencyType>, providerAdditionFrequencyContinually?: string | null, providerAdditionFrequencyOther?: string | null, providerAdditionFrequencyNote?: string | null, providerAddMethod: Array<ProviderAddType>, providerAddMethodOther?: string | null, providerAddMethodNote?: string | null, providerLeaveMethod: Array<ProviderLeaveType>, providerLeaveMethodOther?: string | null, providerLeaveMethodNote?: string | null, providerRemovalFrequency: Array<FrequencyType>, providerRemovalFrequencyContinually?: string | null, providerRemovalFrequencyOther?: string | null, providerRemovalFrequencyNote?: string | null, providerOverlap?: OverlapType | null, providerOverlapHierarchy?: string | null, providerOverlapNote?: string | null, status: TaskStatus } } };
 
 export type GetCommunicationQueryVariables = Exact<{
   id: Scalars['UUID']['input'];
@@ -3366,7 +3381,7 @@ export type GetCoordinationQueryVariables = Exact<{
 }>;
 
 
-export type GetCoordinationQuery = { __typename: 'Query', modelPlan: { __typename: 'ModelPlan', id: UUID, modelName: string, participantsAndProviders: { __typename: 'PlanParticipantsAndProviders', id: UUID, coordinateWork?: boolean | null, coordinateWorkNote?: string | null, gainsharePayments?: boolean | null, gainsharePaymentsEligibility: Array<GainshareArrangementEligibility>, gainsharePaymentsEligibilityOther?: string | null, gainsharePaymentsTrack?: boolean | null, gainsharePaymentsNote?: string | null, participantsIds: Array<ParticipantsIdType>, participantsIdsOther?: string | null, participantsIDSNote?: string | null }, operationalNeeds: Array<{ __typename: 'OperationalNeed', id: UUID, modifiedDts?: Time | null }> } };
+export type GetCoordinationQuery = { __typename: 'Query', modelPlan: { __typename: 'ModelPlan', id: UUID, modelName: string, participantsAndProviders: { __typename: 'PlanParticipantsAndProviders', id: UUID, participantRequireFinancialGuarantee?: boolean | null, participantRequireFinancialGuaranteeType: Array<ParticipantRequireFinancialGuaranteeType>, participantRequireFinancialGuaranteeOther?: string | null, participantRequireFinancialGuaranteeNote?: string | null, coordinateWork?: boolean | null, coordinateWorkNote?: string | null, gainsharePayments?: boolean | null, gainsharePaymentsEligibility: Array<GainshareArrangementEligibility>, gainsharePaymentsEligibilityOther?: string | null, gainsharePaymentsTrack?: boolean | null, gainsharePaymentsNote?: string | null, participantsIds: Array<ParticipantsIdType>, participantsIdsOther?: string | null, participantsIDSNote?: string | null }, operationalNeeds: Array<{ __typename: 'OperationalNeed', id: UUID, modifiedDts?: Time | null }> } };
 
 export type GetParticipantOptionsQueryVariables = Exact<{
   id: Scalars['UUID']['input'];
@@ -6698,6 +6713,10 @@ export const GetAllParticipantsAndProvidersDocument = gql`
       riskNote
       willRiskChange
       willRiskChangeNote
+      participantRequireFinancialGuarantee
+      participantRequireFinancialGuaranteeType
+      participantRequireFinancialGuaranteeOther
+      participantRequireFinancialGuaranteeNote
       coordinateWork
       coordinateWorkNote
       gainsharePayments
@@ -6834,6 +6853,10 @@ export const GetCoordinationDocument = gql`
     modelName
     participantsAndProviders {
       id
+      participantRequireFinancialGuarantee
+      participantRequireFinancialGuaranteeType
+      participantRequireFinancialGuaranteeOther
+      participantRequireFinancialGuaranteeNote
       coordinateWork
       coordinateWorkNote
       gainsharePayments
