@@ -27,10 +27,6 @@ const RelatedArticles = ({
 }: RelatedArticlesProps) => {
   const { t } = useTranslation('helpAndKnowledge');
 
-  if (specificArticles?.length !== 3) {
-    return null;
-  }
-
   // Filter to only the category tag type
   let filteredArticles = type
     ? helpAndKnowledgeArticles.filter(article => article.type === type)
@@ -50,12 +46,15 @@ const RelatedArticles = ({
   // It then filters out any undefined values and assigns the result to `articlesToShow`.
   // If `specificArticles` is not defined, it assigns `filteredArticles` to `articlesToShow`.
   const articlesToShow: ArticleProps[] =
-    specificArticles
-      ?.map(articleName =>
-        helpAndKnowledgeArticles.find(article => article.name === articleName)
-      )
-      .filter((article): article is ArticleProps => article !== undefined) ?? // Filter out undefined values
-    filteredArticles;
+    specificArticles && specificArticles.length === 3
+      ? specificArticles
+          ?.map(articleName =>
+            helpAndKnowledgeArticles.find(
+              article => article.name === articleName
+            )
+          )
+          .filter((article): article is ArticleProps => article !== undefined) // Filter out undefined values
+      : filteredArticles;
 
   return (
     <div className="bg-primary-lighter">
