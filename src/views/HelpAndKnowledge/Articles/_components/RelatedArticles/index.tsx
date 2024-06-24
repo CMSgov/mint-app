@@ -13,7 +13,7 @@ import ArticleCard from 'views/HelpAndKnowledge/Articles/_components/ArticleCard
 type RelatedArticlesProps = {
   className?: string;
   currentArticle: string;
-  specificArticles?: [string, string, string];
+  specificArticleNames?: [string, string, string];
   type?: ArticleTypeProps;
   viewAllLink?: boolean;
 };
@@ -21,7 +21,7 @@ type RelatedArticlesProps = {
 const RelatedArticles = ({
   className,
   currentArticle,
-  specificArticles,
+  specificArticleNames,
   type,
   viewAllLink
 }: RelatedArticlesProps) => {
@@ -42,15 +42,15 @@ const RelatedArticles = ({
     .filter(article => article.name !== currentArticle)
     .slice(0, 3);
 
-  // It first checks if `specificArticles` is defined, and if so, it maps over each article name to find the corresponding article object in `helpAndKnowledgeArticles`.
+  // It first checks if `specificArticleNames` is defined, and if so, it maps over each article name to find the corresponding article object in `helpAndKnowledgeArticles`.
   // It then filters out any undefined values and assigns the result to `articlesToShow`.
-  // If `specificArticles` is not defined, it assigns `filteredArticles` to `articlesToShow`.
+  // If `specificArticleNames` is not defined, it assigns `filteredArticles` to `articlesToShow`.
   const articlesToShow: ArticleProps[] =
-    specificArticles
+    specificArticleNames
       ?.map(articleName =>
         helpAndKnowledgeArticles.find(article => article.name === articleName)
       )
-      .filter((article): article is ArticleProps => article !== undefined) ?? // Filter out undefined values
+      .filter((article): article is ArticleProps => !!article) ?? // Filter out undefined values // Filter out undefined values
     filteredArticles;
 
   return (
