@@ -13,7 +13,7 @@ import ArticleCard from 'views/HelpAndKnowledge/Articles/_components/ArticleCard
 type RelatedArticlesProps = {
   className?: string;
   currentArticle: string;
-  specificArticles?: string[];
+  specificArticles?: [string, string, string];
   type?: ArticleTypeProps;
   viewAllLink?: boolean;
 };
@@ -46,15 +46,12 @@ const RelatedArticles = ({
   // It then filters out any undefined values and assigns the result to `articlesToShow`.
   // If `specificArticles` is not defined, it assigns `filteredArticles` to `articlesToShow`.
   const articlesToShow: ArticleProps[] =
-    specificArticles && specificArticles.length === 3
-      ? specificArticles
-          ?.map(articleName =>
-            helpAndKnowledgeArticles.find(
-              article => article.name === articleName
-            )
-          )
-          .filter((article): article is ArticleProps => article !== undefined) // Filter out undefined values
-      : filteredArticles;
+    specificArticles
+      ?.map(articleName =>
+        helpAndKnowledgeArticles.find(article => article.name === articleName)
+      )
+      .filter((article): article is ArticleProps => article !== undefined) ?? // Filter out undefined values
+    filteredArticles;
 
   return (
     <div className="bg-primary-lighter">
