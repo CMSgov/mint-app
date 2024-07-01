@@ -3,17 +3,17 @@ import { Icon } from '@trussworks/react-uswds';
 
 export type ArticleTypeProps = 'getting-started' | 'it-implementation';
 
+export const articleCategories: ArticleTypeProps[] = [
+  'getting-started',
+  'it-implementation'
+];
+
 export type ArticleProps = {
   name: string;
   route: string;
   translation: string;
   type: ArticleTypeProps;
 };
-
-export const articleCategories: ArticleTypeProps[] = [
-  'getting-started',
-  'it-implementation'
-];
 
 // Help and Knowledge Articles
 const helpAndKnowledgeArticles: ArticleProps[] = [
@@ -45,6 +45,12 @@ const helpAndKnowledgeArticles: ArticleProps[] = [
     name: 'High-level project plans',
     route: '/high-level-project-plan',
     translation: 'highLevelProjectPlans',
+    type: 'getting-started'
+  },
+  {
+    name: 'Evaluating data exchange concepts',
+    route: '/data-exchange-concept',
+    translation: 'dataExchangeConcept',
     type: 'getting-started'
   },
   {
