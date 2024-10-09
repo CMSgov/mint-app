@@ -1,7 +1,13 @@
 package resolvers
 
 import (
+	"context"
 	"time"
+
+	"github.com/cms-enterprise/mint-app/pkg/notifications"
+
+	"github.com/cms-enterprise/mint-app/pkg/email"
+	"github.com/cms-enterprise/mint-app/pkg/shared/oddmail"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -24,11 +30,15 @@ func PlanDataExchangeApproachGetByModelPlanID(logger *zap.Logger, store *storage
 
 // PlanDataExchangeApproachUpdate updates a plan data exchange approach
 func PlanDataExchangeApproachUpdate(
+	ctx context.Context,
 	logger *zap.Logger,
 	id uuid.UUID,
 	changes map[string]interface{},
 	principal authentication.Principal,
 	store *storage.Store,
+	emailService oddmail.EmailService,
+	emailTemplateService email.TemplateService,
+	emailAddressBook email.AddressBook,
 ) (*models.PlanDataExchangeApproach, error) {
 	// Get existing plan data exchange approach
 	existing, err := store.PlanDataExchangeApproachGetByID(logger, id)
@@ -69,10 +79,73 @@ func PlanDataExchangeApproachUpdate(
 		return nil, err
 	}
 
+	deaIsChangedMarkedCompleted := (existing.Status == nil || targetStatus != *existing.Status) && targetStatus == models.DataExchangeApproachStatusCompleted
 	existing.Status = &targetStatus
 
 	// Update the plan data exchange approach
 	retDataExchangeApproach, err := store.PlanDataExchangeApproachUpdate(logger, existing)
+
+	if deaIsChangedMarkedCompleted {
+		go func() {
+			// Send email notifications
+			modelPlan, notifErr := ModelPlanGetByIDLOADER(ctx, existing.ModelPlanID)
+			if notifErr != nil {
+				logger.Error("failed to send email notifications", zap.Error(notifErr))
+				return
+			}
+
+			notifErr = SendDataExchangeApproachMarkedCompleteEmailNotification(
+				emailService,
+				emailTemplateService,
+				emailAddressBook,
+				modelPlan,
+				emailAddressBook.MINTTeamEmail,
+				principal.Account().CommonName,
+				false,
+			)
+			if notifErr != nil {
+				logger.Error("failed to send email notifications", zap.Error(notifErr))
+				return
+			}
+
+			dataExchangeApproachUANs, uacErr := store.UserAccountGetNotificationPreferencesForDataExchangeApproachMarkedComplete(existing.ModelPlanID)
+			if uacErr != nil {
+				logger.Error("failed to get user account notification preferences", zap.Error(uacErr))
+				return
+			}
+
+			emailUANs, inAppUANs := models.FilterNotificationPreferences(dataExchangeApproachUANs)
+
+			_, notifErr = notifications.ActivityDataExchangeApproachMarkedCompleteCreate(
+				ctx,
+				principal.Account().ID,
+				store,
+				inAppUANs,
+				existing.ModelPlanID,
+				existing.ID,
+				principal.Account().ID,
+			)
+			if notifErr != nil {
+				logger.Error("failed to create activity", zap.Error(notifErr))
+				return
+			}
+
+			// Send email notifications
+			notifErr = SendDataExchangeApproachMarkedCompleteEmailNotifications(
+				emailService,
+				emailTemplateService,
+				emailAddressBook,
+				emailUANs,
+				modelPlan,
+				principal.Account().CommonName,
+				true,
+			)
+			if notifErr != nil {
+				logger.Error("failed to send email notifications", zap.Error(err))
+			}
+		}()
+	}
+
 	return retDataExchangeApproach, err
 }
 
